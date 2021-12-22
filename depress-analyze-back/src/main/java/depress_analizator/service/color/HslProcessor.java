@@ -28,6 +28,7 @@ public class HslProcessor {
     }
     private void toHSL(BufferedImage source){
         Pixel pixel;
+
         for (int x = 0; x < source.getWidth(); x++) {
             for (int y = 0; y < source.getHeight(); y++) {
                 pixel = new Pixel();
@@ -69,6 +70,11 @@ public class HslProcessor {
                 coolCount++;
             }else warmCount++;
         }
-        return coolCount > warmCount;
+
+        boolean result = coolCount > warmCount;
+        coolCount = 0;
+        warmCount = 0;
+        pixelList.clear();
+        return result;
     }
 }

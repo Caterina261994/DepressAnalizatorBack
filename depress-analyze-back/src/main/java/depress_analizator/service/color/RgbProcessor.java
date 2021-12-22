@@ -44,6 +44,9 @@ public class RgbProcessor {
         float commonNeitral = (float)neitralcolor/(float)square * 100;
 
 
-        return coolColor > warmColor;
+        boolean result = coolColor > warmColor;
+        coolColor = 0;
+        warmColor = 0;
+        return result;
     }
 }

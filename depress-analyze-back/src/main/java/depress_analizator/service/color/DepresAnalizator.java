@@ -40,7 +40,9 @@ public class DepresAnalizator {
         int depresscounter = 0;
         int midleLenght = files.length/2;
               DepressResultEnd depressResultEnd = new DepressResultEnd();
+
         for (MultipartFile e : files){
+            System.out.println("Process " + e.getName());
             Photo fotoDepressResult = new Photo();
             if(hslProcessor.hslProcess(e.getInputStream()) && rgbProcessor.rgbProcess(e.getInputStream())){
                 depresscounter++;
@@ -58,25 +60,24 @@ public class DepresAnalizator {
                 facecounter++;
             }
         }
+
         depresspercent =(int)((double)depresscounter/(double) files.length *100);
         DepressResult depressResult = new DepressResult();
         depressResult.setCreateDate(localDate);
         depressResult.setDepressPercent(depresspercent);
+
         DepressResult depressResult1 = depressResultRepository.save(depressResult);
+
         for (Photo l : fotoDepressResultList){
             l.setDepressResult(depressResult1);
             fotoRepository.save(l);
             StrinLgist.add(l.getFoto());
         }
-        List<String> strings = new ArrayList<>();
-        for (String s: StrinLgist){
-            String temp = "<img src=data:image/jpg;base64," + s + ">";
-            strings.add(temp);
-        }
 
-        depressResultEnd.setDepress(depresscounter>midleLenght);
+
+        depressResultEnd.setDepress(depresscounter>=midleLenght);
         depressResultEnd.setCountdepress(depresspercent);
-        depressResultEnd.setS(strings);
+        depressResultEnd.setS(StrinLgist);
         depressResultEnd.setFacePercent((int)((double)facecounter/(double)files.length*100));
 
         return depressResultEnd;
